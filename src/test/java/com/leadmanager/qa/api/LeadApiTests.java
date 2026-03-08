@@ -1,12 +1,9 @@
 package com.leadmanager.qa.api;
 
-import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
@@ -18,21 +15,24 @@ public class LeadApiTests {
     /**
      * TEST CASE: TC-API-01
      * Scenario: Generate Auth Token (Positive)
+     * Logic: Replaces the 'Login Page' UI action with a direct API call.
      */
     @BeforeClass(description = "TC-API-01: Authenticate and retrieve Bearer Token")
     public void setupAuth() {
-        System.out.println("Executing TC-API-01: Authentication Test");
+        System.out.println("Executing TC-API-01: API Authentication");
         
         String loginPayload = "{\"email\": \"admin@company.com\", \"password\": \"Admin@123\"}";
 
-        Response response = given()
+        authToken = given()
                 .contentType(ContentType.JSON)
                 .body(loginPayload)
-                .post(BASE_URL + "/login");
+                .post(BASE_URL + "/login")
+                .then()
+                .statusCode(200)
+                .extract()
+                .path("token");
 
-        Assert.assertEquals(response.getStatusCode(), 200, "Auth Failed!");
-        authToken = response.jsonPath().getString("token");
-        Assert.assertNotNull(authToken, "Token should not be null");
+        Assert.assertNotNull(authToken, "API Auth Failed: Token is null");
     }
 
     /**
@@ -41,7 +41,7 @@ public class LeadApiTests {
      */
     @Test(priority = 1, description = "TC-API-02: Verify Lead creation with valid token")
     public void testCreateLead() {
-        System.out.println("Executing TC-API-02: Create Lead via API");
+        System.out.println("Executing TC-API-02: POST /api/leads");
         
         String leadPayload = "{" +
                 "\"name\": \"API Automation Lead\"," +
@@ -57,7 +57,8 @@ public class LeadApiTests {
                 .post(BASE_URL + "/leads")
         .then()
                 .statusCode(201)
-                .body("name", equalTo("API Automation Lead"));
+                .body("name", equalTo("API Automation Lead"))
+                .body("email", equalTo("api_test@example.com"));
     }
 
     /**
@@ -66,7 +67,7 @@ public class LeadApiTests {
      */
     @Test(priority = 2, description = "TC-API-04: Verify retrieval of lead list")
     public void testGetAllLeads() {
-        System.out.println("Executing TC-API-04: Get Lead List via API");
+        System.out.println("Executing TC-API-04: GET /api/leads");
         
         given()
                 .header("Authorization", "Bearer " + authToken)
@@ -74,7 +75,8 @@ public class LeadApiTests {
                 .get(BASE_URL + "/leads")
         .then()
                 .statusCode(200)
-                .body("size()", greaterThan(0));
+                .body("size()", greaterThan(0))
+                .body("name", hasItem("API Automation Lead"));
     }
 
     /**
