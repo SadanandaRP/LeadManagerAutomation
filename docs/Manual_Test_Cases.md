@@ -2,7 +2,7 @@ Detailed Test Plan: Lead Manager SaaS
 
 1. Project Overview
 
-    This test plan outlines the strategy for validating the Lead Manager application. The focus is on ensuring a seamless UI/UX experience and secure REST API endpoints, specifically enforcing Role-Based Access Control (RBAC) across Admin, Manager, and Viewer tiers.
+This test plan outlines the strategy for validating the Lead Manager application. The focus is on ensuring a seamless UI/UX experience and secure REST API endpoints, specifically enforcing Role-Based Access Control (RBAC) across Admin, Manager, and Viewer tiers.
 
 2. Test Objectives
 
