@@ -27,10 +27,10 @@ Detailed Test Plan: Lead Manager SaaS
 
 4. User Role & Permission Matrix
    
-        Role       Email       Password       Permissions
-        Admin       admin@company.com       Admin@123       Full Access (Create, View, Edit, Delete, Export)
-        Manager       qa@company.com       password123       Limited (Create, View, Edit, Export - No Delete)
-        Viewer       tester@company.com       Test@456       Read-only (No Create/Edit/Delete/Export)
+        Role      Email       Password       Permissions
+        Admin     admin@company.com       Admin@123       Full Access (Create, View, Edit, Delete, Export)
+        Manager   qa@company.com       password123       Limited (Create, View, Edit, Export - No Delete)
+        Viewer    tester@company.com       Test@456       Read-only (No Create/Edit/Delete/Export)
  
 5. Manual Test Cases (Traceability Matrix)
 
