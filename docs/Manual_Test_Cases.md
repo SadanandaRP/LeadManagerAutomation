@@ -1,48 +1,72 @@
-Project Test Plan: Lead Manager SaaS Application
+Detailed Test Plan: Lead Manager SaaS
 
-1. Introduction
+1. Project Overview
 
-    This document defines the strategy for validating the Lead Manager application. The focus is on ensuring secure authentication, role-specific data access, and the end-to-end lifecycle of Lead management (Create → View → Delete).
+    This test plan outlines the strategy for validating the Lead Manager application. The focus is on ensuring a seamless UI/UX experience and secure REST API endpoints, specifically enforcing Role-Based Access Control (RBAC) across Admin, Manager, and Viewer tiers.
 
-3. Test Environment
+2. Test Objectives
+
+       Verify successful authentication for all authorized user roles.
+       Validate robust error handling for negative login scenarios.
+       Ensure the integrity of the Lead Lifecycle (Create → List → Secure Access).
+       Confirm that permission restrictions (RBAC) are strictly enforced at the API level.
+
+4. Scope of Testing
+
+UI Testing (Selenium)
+
+    Authentication: Multi-role login and error message validation.
+    Functional: Lead creation through modals and table data persistence.
+    Validations: Client-side mandatory field checks.
+
+API Testing (RestAssured)
+
+    Security: JWT Token generation and unauthorized access prevention (401/403).
+    Functional: CRUD operations on /api/leads and JSON schema validation.
+
+4. User Role & Permission Matrix
    
-        Application URL: https://v0-lead-manager-app.vercel.app
-        API Base URL: https://v0-lead-manager-app.vercel.app
-        Tools: Java 11, Selenium 4.30, Rest-Assured 5.5, TestNG, Maven.
+        Role	Email	Password	Permissions
+        Admin	admin@company.com	Admin@123	Full Access (Create, View, Edit, Delete, Export)
+        Manager	qa@company.com	password123	Limited (Create, View, Edit, Export - No Delete)
+        Viewer	tester@company.com	Test@456	Read-only (No Create/Edit/Delete/Export)
+ 
+5. Manual Test Cases (Traceability Matrix)
 
-5. Role-Based Access Control (RBAC) Matrix
+A. UI Authentication & Negative Scenarios
 
-The application supports three tiers of access which must be enforced at both the UI and API layers:
+        ID	Scenario	Input Data	Expected Result
+        TC-UI-01	Valid Multi-Role Login	Admin / Manager / Viewer	Successful redirect to Dashboard.
+        TC-UI-02	Wrong Password	admin@company.com / wrongpass	Error: "Invalid credentials".
+        TC-UI-03	Unregistered Email	unknown@test.com / pass123	Error: "User not found".
+        TC-UI-04	Invalid Email Format	notanemail / pass123	Error: "Invalid email format".
+        TC-UI-05	Empty Fields	(empty) / (empty)	Error: "Fields cannot be empty".
 
-    Role	Permissions	Validation Goal
-    Admin	Full CRUD + Export	Verify absolute authority and data visibility.
-    Manager	Create, View, Edit	Verify "Delete" functionality is restricted/hidden.
-    Viewer	View Only	Verify 403 Forbidden for POST/PUT/DELETE actions.
+B. Lead Management (Functional UI)
 
-6. Manual Test Cases (Traceability Matrix)
-Section A: Authentication (UI & API)
-ID	Scenario	Input Type	Expected Result
-TC-SEC-01	Multi-Role Login	Admin/Manager/Viewer	Success; JWT Token stored in session.
-TC-NEG-01	Invalid Password	Valid Email + wrongpass	UI Error: "Invalid credentials".
-TC-NEG-02	Invalid Email	unknown@test.com	UI Error: "User not found".
-TC-NEG-03	Format Validation	notanemail	UI Error: "Invalid email format".
-TC-NEG-04	Security Check	No Token (API)	API Response: 401 Unauthorized.
-Section B: Lead Management (Functional)
-ID	Scenario	User Role	Expected Result
-TC-FUNC-01	Create Lead (UI)	Admin/Manager	Modal closes; Lead appears in Dashboard table.
-TC-FUNC-02	Mandatory Fields	Admin	"Name" validation triggers if field is empty.
-TC-FUNC-03	View Leads (API)	Viewer	API Response: 200 OK with JSON Lead list.
-TC-FUNC-04	Restricted Action	Viewer	API Response: 403 Forbidden on POST /leads.
+        ID	Scenario	User Role	Expected Result
+        TC-UI-06	Create New Lead	Admin / Manager	Lead saved; modal closes; name appears in table.
+        TC-UI-07	Mandatory Field Validation	Admin	Error: "Name is required" triggers on empty save.
+        TC-UI-08	Read-Only UI Restriction	Viewer	"Add Lead" and "Delete" buttons are hidden/disabled.
 
-7. Automation Strategy
+C. REST API Endpoints (Security & Data)
 
-    UI Layer: Page Object Model (POM) used to decouple locators from test logic. WebDriverWait implemented to handle asynchronous React components.
-    API Layer: Rest-Assured used for functional validation. Static Bearer tokens used to simulate specific user sessions.
-    Data-Driven: TestNG @DataProvider used for Negative Login scenarios to minimize code duplication.
-    Reporting: ExtentReportManager listener provides a visual HTML dashboard with pass/fail pie charts.
+        ID	Scenario	Method	Expected Result
+        TC-API-01	Token Generation	POST /login	Status 200 OK + JWT Token.
+        TC-API-02	Authorized Lead Creation	POST /leads	Status 201 Created (Admin/Manager).
+        TC-API-03	Unauthorized Creation	POST /leads	Status 403 Forbidden (Viewer).
+        TC-API-04	Missing Token Access	GET /leads	Status 401 Unauthorized.
+        TC-API-05	Data Retrieval	GET /leads	Status 200 OK + JSON Array of Leads.
 
-8. Exit Criteria
-9. 
-    100% of Critical/High priority test cases passed.
-    Zero 500-level (Internal Server) errors encountered during API execution.
-    Automation suite runs successfully in a "clean-room" environment via mvn clean test.
+6. Automation Strategy
+
+    Design Pattern: Page Object Model (POM) to isolate UI locators from test logic.
+    Framework: TestNG using @DataProvider for efficient Negative Login testing.
+    Wait Strategy: Explicit Waits used to handle asynchronous React components.
+    Reporting: ExtentReports providing a visual HTML dashboard with pass/fail metrics.
+
+7. Execution Instructions
+
+    Navigate to root: cd LeadManagerAutomation
+    Run: mvn clean test
+    Report: Open test-output/ExtentReport.html in any browser.
