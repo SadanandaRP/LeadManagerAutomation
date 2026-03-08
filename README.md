@@ -17,12 +17,13 @@ User Role & Coverage Matrix
 
 The suite validates three distinct user tiers, ensuring that permissions are strictly enforced at both the UI and API levels:
 
-Role	     Access Level	     UI/API Scenarios Validated
-Admin	    Full Access	      Login, Create, View, Edit, Export, Delete
-Manager	  Limited	          Login, Create, View, Edit, Export (No Delete)
-Viewer	   Read-Only	        Login, View Only (403 Forbidden on Create/Delete)
+    Role	     Access Level	     UI/API Scenarios Validated
+    Admin	    Full Access	      Login, Create, View, Edit, Export, Delete
+    Manager	  Limited	          Login, Create, View, Edit, Export (No Delete)
+    Viewer	   Read-Only	        Login, View Only (403 Forbidden on Create/Delete)
 
 Automated Scenarios
+
 UI Tests (LeadUiTests.java)
 
     TC-UI-01: Positive Login flow for Admin, Manager, and Viewer roles.
@@ -39,30 +40,26 @@ API Tests (LeadApiTests.java)
 Quick Start
 
     Clone the Repository:
-    bash
+        bash
+        git clone https://github.com
+        cd LeadManagerAutomation
 
-    git clone https://github.com
-    cd LeadManagerAutomation
-
-    Use code with caution.
     Install Dependencies:
-    bash
+        bash
+        mvn install
 
-    mvn install
-
-    Use code with caution.
     Execute All Tests:
-    bash
+        bash
+        mvn clean test
 
-    mvn clean test
-
-    Use code with caution.
      
 Viewing Test Reports
+
 After execution, a professional HTML dashboard is generated:
 
     Report Path: test-output/ExtentReport.html
     Key Features: Visual pie charts, execution timing, and detailed failure stack traces mapped to Manual Test Case IDs.
 
 QA Lead Perspective
-This framework is CI/CD ready. By utilizing WebDriverManager and parameterized Maven properties, it is built to be integrated directly into GitHub Actions or Jenkins with zero manual setup.
+
+    This framework is CI/CD ready. By utilizing WebDriverManager and parameterized Maven properties, it is built to be integrated directly into GitHub Actions or Jenkins with zero manual setup.
