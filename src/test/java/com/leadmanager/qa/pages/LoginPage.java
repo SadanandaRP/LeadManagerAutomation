@@ -10,25 +10,27 @@ public class LoginPage {
     private WebDriver driver;
     private WebDriverWait wait;
 
-    // 1. Locators (Encapsulated)
+    // Locators
     private By emailField = By.name("email");
     private By passwordField = By.name("password");
     private By loginButton = By.cssSelector("button[type='submit']");
-    private By errorMessage = By.id("error-msg"); // Adjust based on actual ID
+    private By errorAlert = By.className("error-message"); // Update based on actual class/ID
 
-    // 2. Constructor
     public LoginPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
-    // 3. Page Actions (Methods)
-    public void enterEmail(String email) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(emailField)).sendKeys(email);
+    public LoginPage enterEmail(String email) {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(emailField)).clear();
+        driver.findElement(emailField).sendKeys(email);
+        return this;
     }
 
-    public void enterPassword(String password) {
+    public LoginPage enterPassword(String password) {
+        driver.findElement(passwordField).clear();
         driver.findElement(passwordField).sendKeys(password);
+        return this;
     }
 
     public void clickLogin() {
@@ -36,7 +38,7 @@ public class LoginPage {
     }
 
     /**
-     * High-level action for a complete login flow
+     * Complete login action for Admin, Manager, or Viewer
      */
     public void login(String email, String password) {
         enterEmail(email);
@@ -45,6 +47,6 @@ public class LoginPage {
     }
 
     public String getErrorMessage() {
-        return wait.until(ExpectedConditions.visibilityOfElementLocated(errorMessage)).getText();
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(errorAlert)).getText();
     }
 }
