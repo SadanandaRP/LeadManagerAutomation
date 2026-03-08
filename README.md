@@ -17,10 +17,10 @@ User Role & Coverage Matrix
 
 The suite validates three distinct user tiers, ensuring that permissions are strictly enforced at both the UI and API levels:
 
-    Role      Access Level	     UI/API Scenarios Validated
+    Role       Access Level	     UI/API Scenarios Validated
     Admin      Full Access	      Login, Create, View, Edit, Export, Delete
-    Manager	  Limited	          Login, Create, View, Edit, Export (No Delete)
-    Viewer	   Read-Only	        Login, View Only (403 Forbidden on Create/Delete)
+    Manager	   Limited	          Login, Create, View, Edit, Export (No Delete)
+    Viewer	    Read-Only	        Login, View Only (403 Forbidden on Create/Delete)
 
 Automated Scenarios
 
