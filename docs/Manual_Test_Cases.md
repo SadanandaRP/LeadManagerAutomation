@@ -61,12 +61,12 @@ Detailed Test Plan: Lead Manager SaaS
 
 6. Automation Strategy
 
-    Design Pattern: Page Object Model (POM) to isolate UI locators from test logic.
-    Framework: TestNG using @DataProvider for efficient Negative Login testing.
-    Wait Strategy: Explicit Waits used to handle asynchronous React components.
-    Reporting: ExtentReports providing a visual HTML dashboard with pass/fail metrics.
+          Design Pattern: Page Object Model (POM) to isolate UI locators from test logic.
+          Framework: TestNG using @DataProvider for efficient Negative Login testing.
+          Wait Strategy: Explicit Waits used to handle asynchronous React components.
+          Reporting: ExtentReports providing a visual HTML dashboard with pass/fail metrics.
 
-7. Execution Instructions
+8. Execution Instructions
 
     Navigate to root: cd LeadManagerAutomation
     Run: mvn clean test
