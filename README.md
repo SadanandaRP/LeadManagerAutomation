@@ -1,7 +1,9 @@
  Lead Manager E2E Automation Framework 
-📌 Project Overview
+
+Project Overview
 A professional-grade Test Automation Framework designed to validate the Lead Manager SaaS Application. This project demonstrates advanced QA engineering practices, including UI/API integration, Role-Based Access Control (RBAC) validation, and Data-Driven Testing.
-🛠️ Tech Stack
+
+Tech Stack
 
     Language: Java 11
     UI Engine: Selenium WebDriver (v4.18.1)
@@ -11,13 +13,16 @@ A professional-grade Test Automation Framework designed to validate the Lead Man
     Reporting: ExtentReports (Interactive HTML Dashboard)
     Build Tool: Maven 
 
-👥 User Role & Coverage Matrix
+User Role & Coverage Matrix
+
 The suite validates three distinct user tiers, ensuring that permissions are strictly enforced at both the UI and API levels:
-Role	Access Level	UI/API Scenarios Validated
-Admin	Full Access	Login, Create, View, Edit, Export, Delete
-Manager	Limited	Login, Create, View, Edit, Export (No Delete)
-Viewer	Read-Only	Login, View Only (403 Forbidden on Create/Delete)
-🧪 Automated Scenarios
+
+Role	     Access Level	     UI/API Scenarios Validated
+Admin	    Full Access	      Login, Create, View, Edit, Export, Delete
+Manager	  Limited	          Login, Create, View, Edit, Export (No Delete)
+Viewer	   Read-Only	        Login, View Only (403 Forbidden on Create/Delete)
+
+Automated Scenarios
 UI Tests (LeadUiTests.java)
 
     TC-UI-01: Positive Login flow for Admin, Manager, and Viewer roles.
@@ -31,7 +36,7 @@ API Tests (LeadApiTests.java)
     TC-API-02/04: Endpoint authorization for POST and GET operations.
     TC-API-03: Security validation for 401 Unauthorized (missing tokens) and 403 Forbidden (role-based violations).
 
-⚙️ Quick Start
+Quick Start
 
     Clone the Repository:
     bash
@@ -53,12 +58,11 @@ API Tests (LeadApiTests.java)
 
     Use code with caution.
      
-
-📊 Viewing Test Reports
+Viewing Test Reports
 After execution, a professional HTML dashboard is generated:
 
     Report Path: test-output/ExtentReport.html
     Key Features: Visual pie charts, execution timing, and detailed failure stack traces mapped to Manual Test Case IDs.
 
-💡 QA Lead Perspective
+QA Lead Perspective
 This framework is CI/CD ready. By utilizing WebDriverManager and parameterized Maven properties, it is built to be integrated directly into GitHub Actions or Jenkins with zero manual setup.
