@@ -1,101 +1,45 @@
-Test Plan: Lead Manager SaaS Application
+Project Test Plan: Lead Manager SaaS Application
 
 1. Introduction
-     The purpose of this document is to define the testing strategy for the Lead Manager application.
-   The goal is to verify the core user flow: Login → Create Lead → List Lead across both UI and API layers. 
+This document defines the strategy for validating the Lead Manager application. The focus is on ensuring secure authentication, role-specific data access, and the end-to-end lifecycle of Lead management (Create → View → Delete).
 
-3. Scope of Testing
+2. Test Environment
 
-    Functional Testing: Validating user authentication and lead management features.
-    UI/UX Testing: Ensuring the dashboard and forms behave as expected.
-    API Testing: Validating REST endpoints, authorization, and data integrity. 
-
-4. Environment & Tools
-
-    UI URL: https://v0-lead-manager-app.vercel.app
+    Application URL: https://v0-lead-manager-app.vercel.app
     API Base URL: https://v0-lead-manager-app.vercel.app
-    Tools: Java, Selenium, Rest-Assured, TestNG, Maven.
+    Tools: Java 11, Selenium 4.30, Rest-Assured 5.5, TestNG, Maven.
 
-Manual Test Cases (UI & API)
+3. Role-Based Access Control (RBAC) Matrix
+The application supports three tiers of access which must be enforced at both the UI and API layers:
+Role	Permissions	Validation Goal
+Admin	Full CRUD + Export	Verify absolute authority and data visibility.
+Manager	Create, View, Edit	Verify "Delete" functionality is restricted/hidden.
+Viewer	View Only	Verify 403 Forbidden for POST/PUT/DELETE actions.
 
-Part 1: UI Test Cases (Login → Create → List) 
+4. Manual Test Cases (Traceability Matrix)
+Section A: Authentication (UI & API)
+ID	Scenario	Input Type	Expected Result
+TC-SEC-01	Multi-Role Login	Admin/Manager/Viewer	Success; JWT Token stored in session.
+TC-NEG-01	Invalid Password	Valid Email + wrongpass	UI Error: "Invalid credentials".
+TC-NEG-02	Invalid Email	unknown@test.com	UI Error: "User not found".
+TC-NEG-03	Format Validation	notanemail	UI Error: "Invalid email format".
+TC-NEG-04	Security Check	No Token (API)	API Response: 401 Unauthorized.
+Section B: Lead Management (Functional)
+ID	Scenario	User Role	Expected Result
+TC-FUNC-01	Create Lead (UI)	Admin/Manager	Modal closes; Lead appears in Dashboard table.
+TC-FUNC-02	Mandatory Fields	Admin	"Name" validation triggers if field is empty.
+TC-FUNC-03	View Leads (API)	Viewer	API Response: 200 OK with JSON Lead list.
+TC-FUNC-04	Restricted Action	Viewer	API Response: 403 Forbidden on POST /leads.
 
-Test ID: TC-UI-01	
-Scenario: Successful Login (Positive)	
-Precondition: User has valid credentials.	
-Test Steps: 1. Navigate to UI URL.
-            2. Enter admin@company.com.
-            3. Enter Admin@123.
-            4. Click Login.	
-Expected Result: User is redirected to the Dashboard; "List of Leads" is visible.
+5. Automation Strategy
 
-Test ID: TC-UI-02	
-Scenario: Invalid Login (Negative)	
-Precondition: App is on Login page.	
-Test Steps: 1. Enter wrong@email.com.
-            2. Enter WrongPass.
-            3. Click Login.
-Expected Result: Error message "Invalid credentials" appears; user remains on Login page.
+    UI Layer: Page Object Model (POM) used to decouple locators from test logic. WebDriverWait implemented to handle asynchronous React components.
+    API Layer: Rest-Assured used for functional validation. Static Bearer tokens used to simulate specific user sessions.
+    Data-Driven: TestNG @DataProvider used for Negative Login scenarios to minimize code duplication.
+    Reporting: ExtentReportManager listener provides a visual HTML dashboard with pass/fail pie charts.
 
-Test ID: TC-UI-03	
-Scenario: Create New Lead (Positive)	
-Precondition: User is logged in.	
-Test Steps: 1. Click "Create Lead" button.
-            2. Fill all fields (Name, Email, Priority).
-            3. Click Save.
-Expected Result: Success message appears; lead is saved successfully.
-
-Test ID: TC-UI-04	
-Scenario: Field Validation (Edge Case)	
-Precondition: User is on "Create Lead" page.	
-Test Steps: 1. Leave "Name" field empty.
-            2. Fill other fields.
-            3. Click Save.	
-Expected Result: Form prevents submission; "Name is required" validation appears.
-
-Test ID: TC-UI-05	
-Scenario: Verify List Lead	
-Precondition: Lead was created in TC-UI-03.	
-Test Steps: 1. Navigate to Dashboard/List page.
-            2. Search or scroll for the created lead.
-Expected Result: The newly created lead name and details are correctly displayed in the list.
-
-
-Part 2: API Test Cases
-
-Test ID: TC-API-01	
-Scenario: Generate Auth Token	
-Method: POST	
-Endpoint: /api/login	
-Expected Result: Status 200 OK; JSON response contains a valid token.
-
-
-Test ID: TC-API-02	
-Scenario: Create Lead (Authorized)	
-Method: POST	
-Endpoint: /api/leads	
-Expected Result: Status 201 Created; Lead object is returned in response.
-
-Test ID: TC-API-03	
-Scenario: Create Lead (Unauthorized)	
-Method: POST	
-Endpoint: /api/leads	
-Expected Result: Status 401 Unauthorized if Bearer token is missing or invalid.
-
-Test ID: TC-API-04	
-Scenario: Get Leads (Pagination)	
-Method: GET	
-Endpoint: /api/leads	
-Expected Result: Status 200 OK; Returns a list of leads with pagination metadata.
-
-Test ID: TC-API-05	
-Scenario: Invalid Input Handling	
-Method: POST	
-Endpoint: /api/leads	
-Expected Result: Status 400 Bad Request when sending invalid email format in body.
-
-
-4. Assumptions 
-    The application uses JWT-based authentication for all protected routes.
-    The "Dashboard" acts as the default "List Lead" view.
-    Test data (admin credentials) provided in the assignment are active.
+6. Exit Criteria
+7. 
+    100% of Critical/High priority test cases passed.
+    Zero 500-level (Internal Server) errors encountered during API execution.
+    Automation suite runs successfully in a "clean-room" environment via mvn clean test.
