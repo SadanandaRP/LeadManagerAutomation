@@ -13,16 +13,16 @@ This test plan outlines the strategy for validating the Lead Manager application
 
 4. Scope of Testing
 
-UI Testing (Selenium)
+       UI Testing (Selenium)
 
-    Authentication: Multi-role login and error message validation.
-    Functional: Lead creation through modals and table data persistence.
-    Validations: Client-side mandatory field checks.
+       Authentication: Multi-role login and error message validation.
+       Functional: Lead creation through modals and table data persistence.
+       Validations: Client-side mandatory field checks.
 
-API Testing (RestAssured)
+       API Testing (RestAssured)
 
-    Security: JWT Token generation and unauthorized access prevention (401/403).
-    Functional: CRUD operations on /api/leads and JSON schema validation.
+       Security: JWT Token generation and unauthorized access prevention (401/403).
+       Functional: CRUD operations on /api/leads and JSON schema validation.
 
 4. User Role & Permission Matrix
    
