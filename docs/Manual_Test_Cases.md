@@ -16,7 +16,7 @@ TC-01: Successful Lead Creation Flow
         Fill in all fields: Name ("Test Lead"), Email ("test@example.com"), Priority ("High"), Status ("New").
         Click "Submit".
         Navigate to the Dashboard/Leads List.
-    Expected Result: User is redirected to the dashboard, and "Test Lead" appears at the top of the list with all details matching the input (p. 4).
+    Expected Result: User is redirected to the dashboard, and "Test Lead" appears at the top of the list with all details matching the input.
 
 2. Negative Scenarios (Validation & Error Handling)
 
@@ -37,8 +37,8 @@ TC-03: Create Lead with Missing Mandatory Fields
 TC-04: API Authorization - Access Without Token
 
     Steps:
-        Send a GET request to /api/leads without the Authorization header (p. 4).
-    Expected Result: System returns a 401 Unauthorized status code (p. 5).
+        Send a GET request to /api/leads without the Authorization header.
+    Expected Result: System returns a 401 Unauthorized status code.
 
 3. Edge & Validation Cases
 
@@ -48,7 +48,7 @@ TC-05: Lead List Pagination Verification
     Steps:
         Log in and navigate to the Leads Dashboard.
         Scroll to the bottom and click the "Next" page button.
-    Expected Result: The list updates to show the next set of leads correctly (p. 4).
+    Expected Result: The list updates to show the next set of leads correctly.
 
 TC-06: Email Format Validation
 
