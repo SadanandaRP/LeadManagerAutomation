@@ -2,9 +2,10 @@ Detailed Test Plan: Lead Manager SaaS
 
 1. Project Overview
 
-This test plan outlines the strategy for validating the Lead Manager application. The focus is on ensuring a seamless UI/UX experience and secure REST API endpoints, specifically enforcing Role-Based Access Control (RBAC) across Admin, Manager, and Viewer tiers.
+       This test plan outlines the strategy for validating the Lead Manager application. The focus is on ensuring a seamless UI/UX
+       experience and secure REST API endpoints, specifically enforcing Role-Based Access Control (RBAC) across Admin, Manager, and Viewer tiers.
 
-2. Test Objectives
+3. Test Objectives
 
        Verify successful authentication for all authorized user roles.
        Validate robust error handling for negative login scenarios.
@@ -33,7 +34,7 @@ This test plan outlines the strategy for validating the Lead Manager application
  
 5. Manual Test Cases (Traceability Matrix)
 
-A. UI Authentication & Negative Scenarios
+       A. UI Authentication & Negative Scenarios
 
         ID	Scenario	Input Data	Expected Result
         TC-UI-01	Valid Multi-Role Login	Admin / Manager / Viewer	Successful redirect to Dashboard.
@@ -42,14 +43,14 @@ A. UI Authentication & Negative Scenarios
         TC-UI-04	Invalid Email Format	notanemail / pass123	Error: "Invalid email format".
         TC-UI-05	Empty Fields	(empty) / (empty)	Error: "Fields cannot be empty".
 
-B. Lead Management (Functional UI)
+       B. Lead Management (Functional UI)
 
         ID	Scenario	User Role	Expected Result
         TC-UI-06	Create New Lead	Admin / Manager	Lead saved; modal closes; name appears in table.
         TC-UI-07	Mandatory Field Validation	Admin	Error: "Name is required" triggers on empty save.
         TC-UI-08	Read-Only UI Restriction	Viewer	"Add Lead" and "Delete" buttons are hidden/disabled.
 
-C. REST API Endpoints (Security & Data)
+       C. REST API Endpoints (Security & Data)
 
         ID	Scenario	Method	Expected Result
         TC-API-01	Token Generation	POST /login	Status 200 OK + JWT Token.
