@@ -38,8 +38,9 @@ You can execute tests via the command line or your IDE:
 1. Run all tests (UI & API)
    bash
    mvn clean test
+   mvn clean test -DsuiteXmlFile=testng.xml
 
-2. Run specific test groups
+3. Run specific test groups
    If you have tagged your tests (e.g., in testng.xml), you can run them specifically:
    bash
 
