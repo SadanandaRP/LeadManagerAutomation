@@ -67,7 +67,8 @@ TC-07: Viewer Role Restricted Actions
     Expected Result: Buttons should be disabled in the UI, or clicking them should trigger a 403 Forbidden error/notification.
 
 Requirements Traceability Matrix (RTM)
-This matrix ensures 100% coverage of the requirements specified in the QA Lead Assignment.
+
+This matrix ensures 100% coverage of the requirements specified.
 
     ID       Requirement Description            Manual TC ID    Automation ID (Java)    Status
     REQ-01   User Login (Positive/Negative)     TC-01, TC-02    TC-UI-01, TC-UI-02      Covered
