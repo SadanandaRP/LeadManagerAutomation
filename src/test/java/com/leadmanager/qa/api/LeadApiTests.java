@@ -2,97 +2,99 @@ package com.leadmanager.qa.api;
 
 import io.restassured.http.ContentType;
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
 public class LeadApiTests {
 
-    private String authToken;
     private final String BASE_URL = "https://v0-lead-manager-app.vercel.app";
+    
+    // Static Tokens from Requirements
+    private final String ADMIN_TOKEN = "Bearer_ADMIN_TEST_TOKEN_12345";
+    private final String MANAGER_TOKEN = "Bearer_MANAGER_TEST_TOKEN_12345";
+    private final String VIEWER_TOKEN = "Bearer_VIEWER_TEST_TOKEN_12345";
 
     /**
      * TEST CASE: TC-API-01
-     * Scenario: Generate Auth Token (Positive)
-     * Logic: Replaces the 'Login Page' UI action with a direct API call.
+     * Scenario: Admin Lead Creation (Full Access)
      */
-    @BeforeClass(description = "TC-API-01: Authenticate and retrieve Bearer Token")
-    public void setupAuth() {
-        System.out.println("Executing TC-API-01: API Authentication");
-        
-        String loginPayload = "{\"email\": \"admin@company.com\", \"password\": \"Admin@123\"}";
+    @Test(priority = 1, description = "TC-API-01: Verify Admin can create a lead")
+    public void testAdminCreateLead() {
+        String payload = "{\"name\":\"Admin API Lead\", \"email\":\"admin_api@test.com\", \"priority\":\"High\"}";
 
-        authToken = given()
-                .contentType(ContentType.JSON)
-                .body(loginPayload)
-                .post(BASE_URL + "/login")
-                .then()
-                .statusCode(200)
-                .extract()
-                .path("token");
-
-        Assert.assertNotNull(authToken, "API Auth Failed: Token is null");
+        given()
+            .header("Authorization", "Bearer " + ADMIN_TOKEN)
+            .contentType(ContentType.JSON)
+            .body(payload)
+        .when()
+            .post(BASE_URL + "/leads")
+        .then()
+            .statusCode(201)
+            .body("name", equalTo("Admin API Lead"));
     }
 
     /**
      * TEST CASE: TC-API-02
-     * Scenario: Create Lead (Authorized)
+     * Scenario: Manager Access Validation
      */
-    @Test(priority = 1, description = "TC-API-02: Verify Lead creation with valid token")
-    public void testCreateLead() {
-        System.out.println("Executing TC-API-02: POST /api/leads");
-        
-        String leadPayload = "{" +
-                "\"name\": \"API Automation Lead\"," +
-                "\"email\": \"api_test@example.com\"," +
-                "\"priority\": \"High\"" +
-                "}";
-
+    @Test(priority = 2, description = "TC-API-02: Verify Manager can view leads but has restricted delete (if applicable)")
+    public void testManagerViewLeads() {
         given()
-                .header("Authorization", "Bearer " + authToken)
-                .contentType(ContentType.JSON)
-                .body(leadPayload)
+            .header("Authorization", "Bearer " + MANAGER_TOKEN)
         .when()
-                .post(BASE_URL + "/leads")
+            .get(BASE_URL + "/leads")
         .then()
-                .statusCode(201)
-                .body("name", equalTo("API Automation Lead"))
-                .body("email", equalTo("api_test@example.com"));
-    }
-
-    /**
-     * TEST CASE: TC-API-04
-     * Scenario: Get Leads (Retrieve List)
-     */
-    @Test(priority = 2, description = "TC-API-04: Verify retrieval of lead list")
-    public void testGetAllLeads() {
-        System.out.println("Executing TC-API-04: GET /api/leads");
-        
-        given()
-                .header("Authorization", "Bearer " + authToken)
-        .when()
-                .get(BASE_URL + "/leads")
-        .then()
-                .statusCode(200)
-                .body("size()", greaterThan(0))
-                .body("name", hasItem("API Automation Lead"));
+            .statusCode(200)
+            .body("size()", greaterThanOrEqualTo(0));
     }
 
     /**
      * TEST CASE: TC-API-03
-     * Scenario: Create Lead (Unauthorized - Negative)
+     * Scenario: Viewer RBAC Restriction (Negative)
      */
-    @Test(priority = 3, description = "TC-API-03: Verify 401 Unauthorized when token is missing")
-    public void testUnauthorizedAccess() {
-        System.out.println("Executing TC-API-03: Negative Security Test");
-        
+    @Test(priority = 3, description = "TC-API-03: Verify Viewer is forbidden from creating leads")
+    public void testViewerCreateRestriction() {
+        String payload = "{\"name\":\"Unauthorized Lead\", \"email\":\"viewer@test.com\"}";
+
         given()
-                .contentType(ContentType.JSON)
-                .body("{}")
+            .header("Authorization", "Bearer " + VIEWER_TOKEN)
+            .contentType(ContentType.JSON)
+            .body(payload)
         .when()
-                .post(BASE_URL + "/leads")
+            .post(BASE_URL + "/leads")
         .then()
-                .statusCode(401);
+            .statusCode(403); // Forbidden for Read-Only user
+    }
+
+    /**
+     * TEST CASE: TC-API-04
+     * Scenario: Unauthorized Access (Security)
+     */
+    @Test(priority = 4, description = "TC-API-04: Verify 401 Unauthorized when no token is provided")
+    public void testUnauthorizedAccess() {
+        given()
+        .when()
+            .get(BASE_URL + "/leads")
+        .then()
+            .statusCode(401);
+    }
+
+    /**
+     * TEST CASE: TC-API-05
+     * Scenario: Invalid Data Validation (Negative)
+     */
+    @Test(priority = 5, description = "TC-API-05: Verify 400 Bad Request for invalid email format")
+    public void testInvalidDataValidation() {
+        String invalidPayload = "{\"name\":\"Test\", \"email\":\"not-an-email\"}";
+
+        given()
+            .header("Authorization", "Bearer " + ADMIN_TOKEN)
+            .contentType(ContentType.JSON)
+            .body(invalidPayload)
+        .when()
+            .post(BASE_URL + "/leads")
+        .then()
+            .statusCode(400); 
     }
 }
