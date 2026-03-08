@@ -65,3 +65,14 @@ TC-07: Viewer Role Restricted Actions
     Steps:
         Attempt to click the "Delete" or "Edit" buttons on any lead.
     Expected Result: Buttons should be disabled in the UI, or clicking them should trigger a 403 Forbidden error/notification.
+
+Requirements Traceability Matrix (RTM)
+This matrix ensures 100% coverage of the requirements specified in the QA Lead Assignment.
+
+    ID       Requirement Description            Manual TC ID    Automation ID (Java)    Status
+    REQ-01   User Login (Positive/Negative)     TC-01, TC-02    TC-UI-01, TC-UI-02      Covered
+    REQ-02   Create Lead (Mandatory Fields)     TC-03, TC-06    TC-UI-03, TC-UI-04      Covered
+    REQ-03   List Lead (Dashboard Verification) TC-01, TC-05    TC-UI-05                Covered
+    REQ-04   JWT Token Authentication           TC-04           TC-API-01               Covered
+    REQ-05   API Lead Management (GET/POST)     TC-04           TC-API-02, TC-API-04    Covered
+    REQ-06   Role-Based Access Control (RBAC)   TC-07           TC-API-03               Covered
