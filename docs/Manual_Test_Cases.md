@@ -36,12 +36,12 @@ Detailed Test Plan: Lead Manager SaaS
 
        A. UI Authentication & Negative Scenarios
 
-        ID	Scenario	Input Data	Expected Result
-        TC-UI-01	Valid Multi-Role Login	Admin / Manager / Viewer	Successful redirect to Dashboard.
-        TC-UI-02	Wrong Password	admin@company.com / wrongpass	Error: "Invalid credentials".
-        TC-UI-03	Unregistered Email	unknown@test.com / pass123	Error: "User not found".
-        TC-UI-04	Invalid Email Format	notanemail / pass123	Error: "Invalid email format".
-        TC-UI-05	Empty Fields	(empty) / (empty)	Error: "Fields cannot be empty".
+        ID          Scenario                   Input Data                        Expected Result
+        TC-UI-01    Valid Multi-Role Login     Admin / Manager / Viewer          Successful redirect to Dashboard.
+        TC-UI-02    Wrong Password             admin@company.com / wrongpass     Error: "Invalid credentials".
+        TC-UI-03    Unregistered Email         unknown@test.com / pass123        Error: "User not found".
+        TC-UI-04    Invalid Email Format       notanemail / pass123              Error: "Invalid email format".
+        TC-UI-05    Empty Fields               (empty) / (empty)                 Error: "Fields cannot be empty".
 
        B. Lead Management (Functional UI)
 
