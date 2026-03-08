@@ -45,19 +45,19 @@ Detailed Test Plan: Lead Manager SaaS
 
        B. Lead Management (Functional UI)
 
-        ID	Scenario	User Role	Expected Result
-        TC-UI-06	Create New Lead	Admin / Manager	Lead saved; modal closes; name appears in table.
-        TC-UI-07	Mandatory Field Validation	Admin	Error: "Name is required" triggers on empty save.
-        TC-UI-08	Read-Only UI Restriction	Viewer	"Add Lead" and "Delete" buttons are hidden/disabled.
+        ID           Scenario                    User Role          Expected Result
+        TC-UI-06     Create New Lead             Admin / Manager    Lead saved; modal closes; name appears in table.
+        TC-UI-07     Mandatory Field Validation  Admin              Error: "Name is required" triggers on empty save.
+        TC-UI-08     Read-Only UI Restriction    Viewer             "Add Lead" and "Delete" buttons are hidden/disabled.
 
        C. REST API Endpoints (Security & Data)
 
-        ID	Scenario	Method	Expected Result
-        TC-API-01	Token Generation	POST /login	Status 200 OK + JWT Token.
-        TC-API-02	Authorized Lead Creation	POST /leads	Status 201 Created (Admin/Manager).
-        TC-API-03	Unauthorized Creation	POST /leads	Status 403 Forbidden (Viewer).
-        TC-API-04	Missing Token Access	GET /leads	Status 401 Unauthorized.
-        TC-API-05	Data Retrieval	GET /leads	Status 200 OK + JSON Array of Leads.
+        ID           Scenario                  Method            Expected Result
+        TC-API-01    Token Generation          POST /login       Status 200 OK + JWT Token.
+        TC-API-02    Authorized Lead Creation  POST /leads       Status 201 Created (Admin/Manager).
+        TC-API-03    Unauthorized Creation     POST /leads       Status 403 Forbidden (Viewer).
+        TC-API-04    Missing Token Access      GET /leads        Status 401 Unauthorized.
+        TC-API-05    Data Retrieval            GET /leads        Status 200 OK + JSON Array of Leads.
 
 6. Automation Strategy
 
