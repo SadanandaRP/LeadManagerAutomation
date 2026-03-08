@@ -12,6 +12,12 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Version Management -->
+        <selenium.version>4.30.0</selenium.version>
+        <rest-assured.version>5.5.7</rest-assured.version>
+        <testng.version>7.11.0</testng.version>
+        <jackson.version>2.18.2</jackson.version>
+        <extentreports.version>5.1.2</extentreports.version>
     </properties>
 
     <dependencies>
@@ -19,29 +25,43 @@
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>4.18.1</version>
+            <version>${selenium.version}</version>
         </dependency>
 
         <!-- API Automation: Rest-Assured -->
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
-            <version>5.4.0</version>
+            <version>${rest-assured.version}</version>
+        </dependency>
+
+        <!-- JSON Parsing for Data-Driven API Tests -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
 
         <!-- Test Framework: TestNG -->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>7.9.0</version>
+            <version>${testng.version}</version>
             <scope>test</scope>
         </dependency>
 
-        <!-- WebDriver Manager (Automatic Driver Setup) -->
+        <!-- WebDriver Manager (Redundant for Selenium 4.6+ but useful for specific configs) -->
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
-            <version>5.7.0</version>
+            <version>5.9.2</version>
+        </dependency>
+
+        <!-- Reporting: ExtentReports -->
+        <dependency>
+            <groupId>com.aventstack</groupId>
+            <artifactId>extentreports</artifactId>
+            <version>${extentreports.version}</version>
         </dependency>
     </dependencies>
 
@@ -50,9 +70,8 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.2.5</version>
+                <version>3.5.2</version>
                 <configuration>
-                    <!-- Points to your TestNG configuration file -->
                     <suiteXmlFiles>
                         <suiteXmlFile>testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
